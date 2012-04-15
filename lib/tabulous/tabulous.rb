@@ -87,7 +87,8 @@ module Tabulous
 
   def self.render_tab(options)
     html = ''
-    klass = (options[:active] ? 'active' : 'inactive')
+    klass = option[:class] || ""
+    klass << (options[:active] ? 'active' : 'inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
     html << %Q{<li class="#{klass}">}
     if (options[:active] && !@@active_tab_clickable) || options[:enabled] == false
