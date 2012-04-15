@@ -2,7 +2,7 @@ module Tabulous
 
   class Tab
     
-    attr_reader :name, :parent
+    attr_reader :name, :parent, :html_class
     attr_accessor :subtabs
     
     def initialize(name, text, path, visible, enabled, html_class="")
