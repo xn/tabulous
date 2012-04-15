@@ -90,7 +90,7 @@ module Tabulous
 
   def self.render_tab(options)
     html = ''
-    klass = option[:class] || ""
+    klass = options[:class] || ""
     klass << (options[:active] ? 'active' : 'inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
     html << %Q{<li class="#{klass}">}
@@ -106,7 +106,7 @@ module Tabulous
   # markup spefically tailored for Twitter Bootstrap
   def self.render_dropdown_tab(view, options)
     html = ''
-    klass = option[:class] || ""
+    klass = options[:class] || ""
     klass << ' dropdown'
     klass << (options[:active] ? ' active' : ' inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
