@@ -3,13 +3,31 @@ module Tabulous
   def self.setup
     yield self
   end
-  
+
+  def self.tabs_block
+    @@tabs_block ||= []
+  end
+
   def self.tabs(&block)
-    @@tabs_block = block
+    @@tabs_block = []
+    self.tabs_block << block
+  end
+
+  def self.add_tabs(&block)
+    self.tabs_block << block
+  end
+
+  def self.actions_block
+    @@actions_block ||= []
   end
 
   def self.actions(&block)
-    @@actions_block = block
+    @@actions_block = []
+    self.actions_block << block
+  end
+
+  def self.add_actions(&block)
+    self.actions_block << block
   end
 
   def self.render_tabs(view)
@@ -134,13 +152,8 @@ module Tabulous
   end
 
   def self.initialize_tabs(view)
-    if view.respond_to? :instance_exec # for Ruby 1.9
-      self.tabs = view.instance_exec(&@@tabs_block)
-      self.actions = view.instance_exec(&@@actions_block)
-    else
-      self.tabs = view.instance_eval(&@@tabs_block)
-      self.actions = view.instance_eval(&@@actions_block)
-    end
+    self.tabs    = array_from_blocks(view, tabs_block)
+    self.actions = array_from_blocks(view, actions_block)
   end
 
   def self.tabs=(ary)
@@ -244,4 +257,15 @@ module Tabulous
     true
   end
 
+private
+
+  def self.array_from_blocks(view, blocks)
+    blocks.reduce([]) do |array, block|
+      if view.respond_to? :instance_exec # for Ruby 1.9
+        array + view.instance_exec(&block)
+      else
+        array + view.instance_eval(&block)
+      end
+    end
+  end
 end
