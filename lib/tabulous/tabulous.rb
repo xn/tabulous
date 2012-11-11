@@ -49,26 +49,29 @@ module Tabulous
         subtabs = tab.subtabs.select{|subtab| subtab.visible?(view)}
       end
       if @@bootstrap_style_subtabs && !subtabs.empty?
-        html << render_dropdown_tab(view,
+        html << render_dropdown_tab(view, {
                                     :text => tab.text(view),
                                     :class => tab.html_class,
                                     :path => tab.path(view),
                                     :active => (active_tab_name && tab.name == active_tab_name),
                                     :enabled => tab.enabled?(view),
-                                    :subtabs => subtabs)
+                                    :subtabs => subtabs
+                                    }.merge(tab.options(view)))
       else
-        html << render_tab(:text => tab.text(view),
-                           :class => tab.html_class,  
+        html << render_tab({
+                           :text => tab.text(view),
                            :path => tab.path(view),
                            :active => (active_tab_name && tab.name == active_tab_name),
-                           :enabled => tab.enabled?(view))
+                           :enabled => tab.enabled?(view)
+                           }.merge(tab.options(view)))
       end
+      html << " "
     end
     html << '</ul>'
     html << (@@html5 ? '</nav>' : '</div>')
     view.raw(html)
   end
-  
+
   def self.render_subtabs(view)
     if @@bootstrap_style_subtabs
       raise TabulousError,
@@ -112,10 +115,11 @@ module Tabulous
     klass << (options[:active] ? ' active' : ' inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
     html << %Q{<li class="#{klass}">}
+    method = %Q{ data-method="#{options[:method]}" } if options[:method]
     if (options[:active] && !@@active_tab_clickable) || options[:enabled] == false
       html << %Q{<span class="tab">#{options[:text]}</span>}
     else
-      html << %Q{<a href="#{options[:path]}" class="tab">#{options[:text]}</a>}
+      html << %Q{<a href="#{options[:path]}" class="tab"#{method}>#{options[:text]}</a>}
     end
     html << '</li>'
     html
@@ -134,7 +138,8 @@ module Tabulous
     else
       html << %Q{<a class="dropdown-toggle tab"}
       html << %Q{   data-toggle="dropdown"}
-      html << %Q{   href="#">}
+      html << %Q{   data-method="#{options[:method]}"} if options[:method]
+      html << %Q{   href="#{options[:path]}">}
       html << %Q{#{options[:text]}<b class="caret"></b></a>}
     end
     if @@subtabs_ul_class
@@ -143,6 +148,7 @@ module Tabulous
       html << '<ul class="dropdown-menu">'
     end
     for subtab in options[:subtabs]
+      href = subtab.path(view)
       if subtab.text(view).nil?
         html << '<li class="divider">'
       else
@@ -150,8 +156,10 @@ module Tabulous
           html << '<li class="enabled">'
         else
           html << '<li class="disabled">'
+          href = "javascript:void(0)"
         end
-        html << %Q{<a href="#{subtab.path(view)}">#{subtab.text(view)}</a>}
+        method = %Q{ data-method="#{subtab.options(view)[:method]}" } if subtab.options(view)[:method]
+        html << %Q{<a href="#{href}" class="unselectable" unselectable="on"#{method}>#{subtab.text(view)}</a>}
       end
       html << '</li>'
     end
@@ -185,7 +193,7 @@ module Tabulous
       @@tabs << tab
     end
   end
-  
+
   def self.actions=(ary)
     @@actions = {}
     ary.each do |a|
@@ -196,17 +204,20 @@ module Tabulous
               "in the config.actions array has the wrong number of elements."
       end
     end
-    ary.each do |controller, action, tab|
+    ary.each do |controller, actions, tab|
       @@actions[controller] ||= {}
-      @@actions[controller][action] ||= []
-      @@actions[controller][action] << tab
+      actions = [actions] unless actions.is_a?( Array)
+      actions.each do |action|
+        @@actions[controller][action] ||= []
+        @@actions[controller][action] << tab
+      end
     end
   end
-  
+
   def self.main_tabs
     @@tabs.select { |t| !t.subtab? }
   end
-  
+
   def self.active_tab(view)
     controller = view.controller_path.to_sym
     action = view.action_name.to_sym

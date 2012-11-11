@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "colored", "~> 1.2.0"
   s.add_dependency "rails", "~> 3.0"
-  s.add_development_dependency "bundler", "~> 1.1.1"
+  s.add_development_dependency "bundler", "~> 1.2.0"
   s.add_development_dependency "capybara", "~> 1.1.2"
   s.add_development_dependency "rake", "=0.8.7"
   if RUBY_VERSION < "1.9"
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "launchy"
   s.add_development_dependency "diffy"
   s.add_development_dependency 'sqlite3-ruby', '~> 1.3.3'
-  s.add_development_dependency 'sqlite3', '=1.3.4'
+  s.add_development_dependency 'sqlite3', '~>1.3.6'
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact

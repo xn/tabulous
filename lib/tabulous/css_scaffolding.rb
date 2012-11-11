@@ -3,12 +3,12 @@ module Tabulous
     return '' unless @@css.scaffolding
     %Q{
       <style type="text/css">
-      
+
       body {
         margin: 0;
         padding: 0;
       }
-      
+
       #tabs, #tabs ul, #tabs ul li, #tabs ul li span, #tabs ul li a,
       #subtabs, #subtabs ul, #subtabs ul li, #subtabs ul li span, #subtabs ul li a {
         margin: 0;
@@ -48,11 +48,11 @@ module Tabulous
         padding: 5px 15px 3px 15px;
         float: left;
       	-webkit-border-top-left-radius: 8px;
-      	-khtml-border-radius-topleft: 8px;	
+      	-khtml-border-radius-topleft: 8px;
       	-moz-border-radius-topleft: 8px;
       	border-top-left-radius: 8px;
       	-webkit-border-top-right-radius: 8px;
-      	-khtml-border-radius-topright: 8px;	
+      	-khtml-border-radius-topright: 8px;
       	-moz-border-radius-topright: 8px;
       	border-top-right-radius: 8px;
       }

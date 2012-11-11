@@ -1,6 +1,6 @@
 module Tabulous
   module Helpers
-    
+
     def tabs
       Tabulous.render_tabs(self)
     end

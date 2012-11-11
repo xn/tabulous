@@ -79,15 +79,15 @@ Tabulous.setup do |config|
 <%= s = []
     s <<  '  config.tabs do'
     s <<  '    ['
-    s <<  '      #-------------------------------------------------------------------------------------------------#'
-    s <<  '      #    TAB NAME         |    DISPLAY TEXT     |    PATH           |    VISIBLE?    |    ENABLED?    #'
-    s <<  '      #-------------------------------------------------------------------------------------------------#'
+    s <<  '      #------------------------------------------------------------------------------------------------------------------#'
+    s <<  '      #    TAB NAME         |    DISPLAY TEXT     |    PATH           |    VISIBLE?    |    ENABLED?    |    OPTIONS     #'
+    s <<  '      #------------------------------------------------------------------------------------------------------------------#'
     for tab in tab_data
-      s << "[    :#{tab[:name]}_tab  ,  '#{tab[:text]}'    ,  #{tab[:path_helper]}  ,  true  ,  true  ],"
+      s << "[    :#{tab[:name]}_tab  ,  '#{tab[:text]}'    ,  #{tab[:path_helper]}  ,  true  ,  true  ,  {}  ],"
     end
-    s <<  '      #-------------------------------------------------------------------------------------------------#'
-    s <<  '      #    TAB NAME         |    DISPLAY TEXT     |    PATH           |    VISIBLE?    |    ENABLED?    #'
-    s <<  '      #-------------------------------------------------------------------------------------------------#'
+    s <<  '      #------------------------------------------------------------------------------------------------------------------#'
+    s <<  '      #    TAB NAME         |    DISPLAY TEXT     |    PATH           |    VISIBLE?    |    ENABLED?    |    OPTIONS     #'
+    s <<  '      #------------------------------------------------------------------------------------------------------------------#'
     s <<  '    ]'
     s <<  '  end'
     Tabulous::Formatter.format(s).join("\n") %>
@@ -182,7 +182,7 @@ Tabulous.setup do |config|
   # generate invalid HTML markup.  They are merely meant to give you a
   # head start or an easy way to prototype quickly.  Set this to false if
   # you are using Twitter Bootstrap.
-  # 
+  #
   config.css.scaffolding = true
 
   # You can tweak the colors of the generated CSS.
