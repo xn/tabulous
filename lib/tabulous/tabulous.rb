@@ -143,12 +143,16 @@ module Tabulous
       html << '<ul class="dropdown-menu">'
     end
     for subtab in options[:subtabs]
-      if subtab.enabled?(view)
-        html << '<li class="enabled">'
+      if subtab.text(view).nil?
+        html << '<li class="divider">'
       else
-        html << '<li class="disabled">'
+        if subtab.enabled?(view)
+          html << '<li class="enabled">'
+        else
+          html << '<li class="disabled">'
+        end
+        html << %Q{<a href="#{subtab.path(view)}">#{subtab.text(view)}</a>}
       end
-      html << %Q{<a href="#{subtab.path(view)}">#{subtab.text(view)}</a>}
       html << '</li>'
     end
     html << '</ul>'
