@@ -51,12 +51,14 @@ module Tabulous
       if @@bootstrap_style_subtabs && !subtabs.empty?
         html << render_dropdown_tab(view,
                                     :text => tab.text(view),
+                                    :class => tab.html_class,
                                     :path => tab.path(view),
                                     :active => (active_tab_name && tab.name == active_tab_name),
                                     :enabled => tab.enabled?(view),
                                     :subtabs => subtabs)
       else
         html << render_tab(:text => tab.text(view),
+                           :class => tab.html_class,  
                            :path => tab.path(view),
                            :active => (active_tab_name && tab.name == active_tab_name),
                            :enabled => tab.enabled?(view))
@@ -94,6 +96,7 @@ module Tabulous
     return if subtabs.empty? && !@@always_render_subtabs
     for subtab in subtabs
       html << render_tab(:text => subtab.text(view),
+                         :class => subtab.html_class,
                          :path => subtab.path(view),
                          :active => active?(controller, action, subtab.name),
                          :enabled => subtab.enabled?(view))
@@ -105,7 +108,8 @@ module Tabulous
 
   def self.render_tab(options)
     html = ''
-    klass = (options[:active] ? 'active' : 'inactive')
+    klass = options[:class] || ""
+    klass << (options[:active] ? ' active' : ' inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
     html << %Q{<li class="#{klass}">}
     if (options[:active] && !@@active_tab_clickable) || options[:enabled] == false
@@ -120,7 +124,8 @@ module Tabulous
   # markup spefically tailored for Twitter Bootstrap
   def self.render_dropdown_tab(view, options)
     html = ''
-    klass = 'dropdown'
+    klass = options[:class] || ""
+    klass << ' dropdown'
     klass << (options[:active] ? ' active' : ' inactive')
     klass << (options[:enabled] ? ' enabled' : ' disabled')
     html << %Q{<li class="#{klass}">}

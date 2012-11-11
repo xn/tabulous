@@ -2,10 +2,10 @@ module Tabulous
 
   class Tab
     
-    attr_reader :name, :parent
+    attr_reader :name, :parent, :html_class
     attr_accessor :subtabs
     
-    def initialize(name, text, path, visible, enabled)
+    def initialize(name, text, path, visible, enabled, html_class="")
       @name = name
       name = name.to_s
       if name.ends_with? '_tab'
@@ -21,6 +21,7 @@ module Tabulous
       @visible = visible
       @enabled = enabled
       @subtabs = []
+      @html_class = html_class
     end
     
     def add_parent(tab)
